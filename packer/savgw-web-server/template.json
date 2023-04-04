@@ -2,7 +2,7 @@
   "variables": {
     "region": "us-east-1",
     "ssh_username": "admin",
-    "ami_description": "jambonz webserver", 
+    "ami_description": "savgw webserver", 
     "instance_type": "t2.medium",
     "drachtio_version": "v0.8.11-rc1",
     "jambonz_version": "v0.6.6",
@@ -23,7 +23,7 @@
     },
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "ami_name": "jambonz-webserver-{{user `jambonz_version`}}-{{isotime |clean_resource_name }}",
+    "ami_name": "savgw-webserver-{{user `jambonz_version`}}-{{isotime |clean_resource_name }}",
     "ami_description": "{{user `ami_description`}}",
     "launch_block_device_mappings": [
       {
@@ -39,10 +39,10 @@
       }
     },
     "tags": {
-      "Name": "jambonz-webserver"
+      "Name": "savgw-webserver"
     },
     "run_tags": {
-      "Name": "jambonz-webserver-build"
+      "Name": "savgw-webserver-build"
     }
   }],
   "provisioners": [

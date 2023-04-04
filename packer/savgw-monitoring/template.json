@@ -6,7 +6,7 @@
     "instance_type": "c5n.xlarge",
     "savgw_version": "v0.6.6",
     "homer_user": "homer_user",
-    "homer_password": "XcapJTqy11LnsYRtxXGPTYQkAnI",
+    "homer_password": "SmartJTqy11AssisttxXGPTYQkAnI",
     "install_influxdb":  "yes",
     "install_homer":  "yes",
     "install_nodered":  "yes",

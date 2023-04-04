@@ -2,9 +2,9 @@
   "variables": {
     "region": "us-east-1",
     "ssh_username": "admin",
-    "ami_description": "jambonz SBC media server", 
+    "ami_description": "savgw SBC media server", 
     "drachtio_version": "v0.8.11-rc2",
-    "jambonz_version": "v0.6.6",
+    "savgw_version": "v0.6.6",
     "instance_type": "t2.medium",
     "rtp_engine_version": "mr9.3.1.8",
     "rtp_engine_min_port": "40000",
@@ -26,7 +26,7 @@
     },
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "ami_name": "jambonz-sbc-rtp-{{user `jambonz_version`}}-{{isotime |clean_resource_name }}",
+    "ami_name": "savgw-sbc-rtp-{{user `savgw_version`}}-{{isotime |clean_resource_name }}",
     "ami_description": "{{user `ami_description`}}",
     "launch_block_device_mappings": [
       {
@@ -42,10 +42,10 @@
       }
     },
     "tags": {
-      "Name": "jambonz-sbc-rtp"
+      "Name": "savgw-sbc-rtp"
     },
     "run_tags": {
-      "Name": "jambonz-sbc-rtp-build"
+      "Name": "savgw-sbc-rtp-build"
     }
   }],
   "provisioners": [
@@ -66,7 +66,7 @@
         "ssh-keyscan github.com >> ~/.ssh/known_hosts",
         "mkdir ~/apps",
         "cd ~/apps",
-        "git clone git@github.com:jambonz/sbc-rtpengine-sidecar.git -b {{user `jambonz_version`}}",
+        "git clone git@github.com:savgw/sbc-rtpengine-sidecar.git -b {{user `savgw_version`}}",
         "sudo find / -name authorized_keys | sudo xargs -0 -r rm -Rf"
       ]
     },
@@ -105,7 +105,7 @@
     },
     {
       "type": "shell",
-      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `jambonz_version`}}",
+      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `savgw_version`}}",
       "script": "scripts/install_app.sh"
     }
   ]
