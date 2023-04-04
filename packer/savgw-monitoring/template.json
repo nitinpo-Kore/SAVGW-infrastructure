@@ -2,16 +2,16 @@
   "variables": {
     "region": "us-east-1",
     "ssh_username": "admin",
-    "ami_description": "jambonz monitoring server", 
-    "instance_type": "t2.medium",
-    "jambonz_version": "v0.6.6",
+    "ami_description": "savgw monitoring server", 
+    "instance_type": "c5n.xlarge",
+    "savgw_version": "v0.6.6",
     "homer_user": "homer_user",
     "homer_password": "XcapJTqy11LnsYRtxXGPTYQkAnI",
     "install_influxdb":  "yes",
     "install_homer":  "yes",
     "install_nodered":  "yes",
     "influxdb_ip":  "127.0.0.1",
-    "tag_name": "jambonz-monitoring-server"
+    "tag_name": "savgw-monitoring-server"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -27,7 +27,7 @@
     },
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "ami_name": "jambonz-monitoring-server-{{user `jambonz_version`}}-{{isotime |clean_resource_name }}",
+    "ami_name": "savgw-monitoring-server-{{user `savgw_version`}}-{{isotime |clean_resource_name }}",
     "ami_description": "{{user `ami_description`}}",
     "launch_block_device_mappings": [
       {
@@ -46,7 +46,7 @@
       "Name": "{{user `tag_name`}}"
     },
     "run_tags": {
-      "Name": "jambonz-monitoring-server-build"
+      "Name": "savgw-monitoring-server-build"
     }
   }],
   "provisioners": [
