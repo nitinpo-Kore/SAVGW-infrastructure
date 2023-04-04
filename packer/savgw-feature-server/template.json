@@ -2,7 +2,7 @@
   "variables": {
     "region": "us-east-1",
     "ssh_username": "admin",
-    "ami_description": "jambonz feature server",
+    "ami_description": "savgw feature server",
     "instance_type": "t2.xlarge",
     "drachtio_version": "v0.8.21",
     "jambonz_version": "v0.8.2",
@@ -11,7 +11,7 @@
     "install_telegraf": "yes",
     "install_datadog": "no",
     "datadog_key" : "",
-    "mediaserver_name" : "jambonz",
+    "mediaserver_name" : "savgw",
     "preferred_codec_list" : "PCMU,PCMA,OPUS,G722"
   },
   "builders": [{
@@ -28,7 +28,7 @@
     },
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "ami_name": "jambonz-feature-server-{{user `jambonz_version`}}-{{user `ami_base_image_arch`}}-{{isotime |clean_resource_name }}",
+    "ami_name": "savgw-feature-server-{{user `jambonz_version`}}-{{user `ami_base_image_arch`}}-{{isotime |clean_resource_name }}",
     "ami_description": "{{user `ami_description`}}",
     "launch_block_device_mappings": [
       {
@@ -39,10 +39,10 @@
       }
     ],
     "tags": {
-      "Name": "jambonz-feature-server"
+      "Name": "savgw-feature-server"
     },
     "run_tags": {
-      "Name": "jambonz-feature-server-build"
+      "Name": "savgw-feature-server-build"
     }
   }],
   "provisioners": [
@@ -68,6 +68,7 @@
         "git config --global advice.detachedHead false",
         "git clone https://github.com/jambonz/jambonz-feature-server.git -b {{user `jambonz_version`}}",
         "git clone https://github.com/jambonz/fsw-clear-old-calls.git -b {{user `jambonz_version`}}",
+		"mv jambonz-feature-server savgw-feature-server",
         "sudo find / -name authorized_keys | sudo xargs -0 -r rm -Rf"
       ]
     },
@@ -114,7 +115,7 @@
     },
     {
       "type": "shell",
-      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `jambonz_version`}}",
+      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `savgw_version`}}",
       "script": "scripts/install_app.sh"
     },
     {
