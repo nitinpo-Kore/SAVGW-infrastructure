@@ -5,7 +5,7 @@ cd /home/admin
 cp /tmp/ecosystem.config.js apps
 cd apps
 
-cd /home/admin/apps/jambonz-feature-server && sudo npm install --unsafe-perm
+cd /home/admin/apps/savgw-feature-server && sudo npm install --unsafe-perm
 cd /home/admin/apps/fsw-clear-old-calls && npm install && sudo npm install -g .
 
 echo "0 *	* * * root    fsw-clear-old-calls --password JambonzR0ck$ >> /var/log/fsw-clear-old-calls.log 2>&1" | sudo tee -a /etc/crontab
