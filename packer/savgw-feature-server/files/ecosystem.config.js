@@ -1,12 +1,12 @@
 module.exports = {
   apps : [
   {
-    name: 'jambonz-feature-server',
-    cwd: '/home/admin/apps/jambonz-feature-server',
+    name: 'savgw-feature-server',
+    cwd: '/home/admin/apps/savgw-feature-server',
     script: 'app.js',
     instance_var: 'INSTANCE_ID',
-    out_file: '/home/admin/.pm2/logs/jambonz-feature-server.log',
-    err_file: '/home/admin/.pm2/logs/jambonz-feature-server.log',
+    out_file: '/home/admin/.pm2/logs/savgw-feature-server.log',
+    err_file: '/home/admin/.pm2/logs/savgw-feature-server.log',
     exec_mode: 'fork',
     instances: 1,
     autorestart: true,
