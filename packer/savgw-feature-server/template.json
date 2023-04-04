@@ -2,12 +2,17 @@
   "variables": {
     "region": "us-east-1",
     "ssh_username": "admin",
-    "ami_description": "jambonz feature server", 
+    "ami_description": "jambonz feature server",
     "instance_type": "t2.xlarge",
-    "drachtio_version": "v0.8.11-rc2",
-    "jambonz_version": "v0.6.6",
+    "drachtio_version": "v0.8.21",
+    "jambonz_version": "v0.8.2",
+    "ami_base_image_arch": "amd64",
+    "ami_base_image_owner": "136693071363",
     "install_telegraf": "yes",
-    "install_datadog": "no"
+    "install_datadog": "no",
+    "datadog_key" : "",
+    "mediaserver_name" : "jambonz",
+    "preferred_codec_list" : "PCMU,PCMA,OPUS,G722"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -15,15 +20,15 @@
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
-        "name": "debian-10-amd64-*",
+        "name": "debian-11-{{user `ami_base_image_arch`}}-*",
         "root-device-type": "ebs"
       },
-      "owners": ["136693071363"],
+      "owners": ["{{user `ami_base_image_owner`}}"],
       "most_recent": true
     },
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `ssh_username`}}",
-    "ami_name": "jambonz-feature-server-{{user `jambonz_version`}}-{{isotime |clean_resource_name }}",
+    "ami_name": "jambonz-feature-server-{{user `jambonz_version`}}-{{user `ami_base_image_arch`}}-{{isotime |clean_resource_name }}",
     "ami_description": "{{user `ami_description`}}",
     "launch_block_device_mappings": [
       {
@@ -33,11 +38,6 @@
         "delete_on_termination": true
       }
     ],
-    "security_group_filter": {
-      "filters": {
-        "tag:Class": "packer"
-      }
-    },
     "tags": {
       "Name": "jambonz-feature-server"
     },
@@ -51,20 +51,23 @@
       "inline": [
         "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
         "sudo apt-get update",
+        "sudo apt-get remove --auto-remove nftables",
+        "sudo apt-get purge nftables",
         "sudo apt-get -y install python lsof gcc g++ make cmake build-essential git autoconf automake default-mysql-client redis-tools \\",
         "curl telnet libtool libtool-bin libssl-dev libcurl4-openssl-dev libz-dev systemd-coredump liblz4-tool \\",
-        "iptables-dev libavformat-dev liblua5.1-0-dev libavfilter-dev libavcodec-dev libswresample-dev \\",
+        "libxtables-dev libip6tc-dev libip4tc-dev  libiptc-dev libavformat-dev liblua5.1-0-dev libavfilter-dev libavcodec-dev libswresample-dev \\",
         "libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev lsb-release \\",
-        "libhiredis-dev gperf libspandsp-dev default-libmysqlclient-dev htop dnsutils gdb \\",
+        "libhiredis-dev gperf libspandsp-dev default-libmysqlclient-dev htop dnsutils gdb libtcmalloc-minimal4 \\",
         "gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev \\",
         "libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm valgrind libswscale-dev haveged \\",
-        "libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev",
+        "libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev",
         "sudo chmod a+w /usr/local/src",
         "ssh-keyscan github.com >> ~/.ssh/known_hosts",
         "mkdir ~/apps",
         "cd ~/apps",
-        "git clone git@github.com:jambonz/jambonz-feature-server.git -b {{user `jambonz_version`}}",
-        "git clone git@github.com:jambonz/fsw-clear-old-calls.git -b {{user `jambonz_version`}}",
+        "git config --global advice.detachedHead false",
+        "git clone https://github.com/jambonz/jambonz-feature-server.git -b {{user `jambonz_version`}}",
+        "git clone https://github.com/jambonz/fsw-clear-old-calls.git -b {{user `jambonz_version`}}",
         "sudo find / -name authorized_keys | sudo xargs -0 -r rm -Rf"
       ]
     },
@@ -75,7 +78,16 @@
     },
     {
       "type": "shell",
-      "script": "scripts/install_chrony.sh"
+      "script": "scripts/install_os_tuning.sh"
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "ARCH={{user `ami_base_image_arch`}}",
+        "MEDIA_SERVER_NAME={{user `mediaserver_name`}}",
+        "PREFERRED_CODEC_LIST={{user `preferred_codec_list`}}"
+      ],
+      "script": "scripts/install_freeswitch.sh"
     },
     {
       "type": "shell",
@@ -83,17 +95,17 @@
     },
     {
       "type": "shell",
-      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `install_datadog`}}",
+      "environment_vars": [
+        "DD_KEY={{user `datadog_key`}}",
+        "DD_INSTALL={{user `install_datadog`}}"
+      ],
+      "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}'",
       "script": "scripts/install_datadog.sh"
     },
     {
       "type": "shell",
       "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `install_telegraf`}}",
       "script": "scripts/install_telegraf.sh"
-    },
-    {
-      "type": "shell",
-      "script": "scripts/install_freeswitch.sh"
     },
     {
       "type": "shell",
@@ -104,6 +116,17 @@
       "type": "shell",
       "execute_command": "chmod +x {{ .Path }}; sudo '{{ .Path }}' {{user `jambonz_version`}}",
       "script": "scripts/install_app.sh"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections",
+        "echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections",
+        "sudo apt-get -y install iptables-persistent",
+        "sudo rm -Rf /tmp/*",
+        "sudo rm /root/.ssh/authorized_keys",
+        "sudo rm /home/admin/.ssh/authorized_keys"
+      ]
     }
   ]
 }
