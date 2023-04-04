@@ -35,7 +35,7 @@ module.exports = {
       DRACHTIO_SECRET: 'cymru',
       JAMBONES_SBCS: '172.31.32.100:5060',
       JAMBONES_FEATURE_SERVERS: '127.0.0.1:9023:cymru',
-      JAMBONES_FREESWITCH: '127.0.0.1:8021:JambonzR0ck$'
+      JAMBONES_FREESWITCH: '127.0.0.1:8021:Samrtassistgw11$'
 		}
   }]
 };
