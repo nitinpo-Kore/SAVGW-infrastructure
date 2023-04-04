@@ -1,13 +1,13 @@
-# jambonz infrastructure
+# SAVGW infrastructure
 
-This repository contains [packer](packer.io), [terraform](terraform.io), and docker files for deploying jambonz.  For production deployments, an AWS hosted deployment is recommended and the terraform and packer scripts are provided to support that.  For development, a [docker-compose](docker/) file is provided to enable running a full jambonz system on a developer laptop.
+This repository contains [packer](packer.io), [terraform](terraform.io), and docker files for deploying SAVGW.  For production deployments, an AWS hosted deployment is recommended and the terraform and packer scripts are provided to support that.  For development, a [docker-compose](docker/) file is provided to enable running a full SAVGW system on a developer laptop.
 
-A jambonz deployment provides both Session Border Controller (SBC) and feature server functionality.  If you have an existing SBC that you want to use, you can place that in front of the jambonz servers if you wish (though it is not necessary) however you must in all cases deploy both the jambonz SBC and feature server components.
+A SAVGW deployment provides both Session Border Controller (SBC) and feature server functionality.  If you have an existing SBC that you want to use, you can place that in front of the SAVGW servers if you wish (though it is not necessary) however you must in all cases deploy both the SAVGW SBC and feature server components.
 
 There are two supported deployment configurations:
 
-- a [devtest](./terraform/jambonz-small) deployment suitable for development and testing purposes; this configuration consists of one jambonz [SBC server](./packer/jambonz-sbc-sip-rtp) and one [feature server](./packer/jambonz-feature-server).
-- a [production](./terraform/jambonz-standard) deployment; this configuration consists of two SBCs with [SIP](./packer/jambonz-sbc-sip) and [RTP](./packer/jambonz-sbc-rtp) handling separated onto different servers (i.e. 4 servers in total for SBC processing), and [feature servers](./packer/jambonz-feature-server) in an autoscale group.
+- a [devtest](./terraform/SAVGW-small) deployment suitable for development and testing purposes; this configuration consists of one SAVGW [SBC server](./packer/SAVGW-sbc-sip-rtp) and one [feature server](./packer/SAVGW-feature-server).
+- a [production](./terraform/SAVGW-standard) deployment; this configuration consists of two SBCs with [SIP](./packer/SAVGW-sbc-sip) and [RTP](./packer/SAVGW-sbc-rtp) handling separated onto different servers (i.e. 4 servers in total for SBC processing), and [feature servers](./packer/SAVGW-feature-server) in an autoscale group.
 
 #### autoscaling feature servers
 Both the devtest and production deployments create a single feature server in an autoscale group.
