@@ -1,6 +1,6 @@
-# jambonz-feature-server
+# savgw-feature-server
 
-A [packer](https://www.packer.io/) template to build an AMI for the jambonz feature server.  The base linux distro is Debian 10 (buster).
+A [packer](https://www.packer.io/) template to build an AMI for the SAVGW feature server.  The base linux distro is Debian 10 (buster).
 
 ## Installing 
 
@@ -9,7 +9,7 @@ $  packer build -color=false template.json
 ```
 
 ### variables
-There are many variables that can be specified on the `packer build` command line; however defaults (which are shown below) are appropriate for building an "all in one" jambonz server, so you generally should not need to specify values.
+There are many variables that can be specified on the `packer build` command line; however defaults (which are shown below) are appropriate for building an "all in one" savgw server, so you generally should not need to specify values.
 
 ```
 "region": "us-east-1"
@@ -17,7 +17,7 @@ There are many variables that can be specified on the `packer build` command lin
 The region to create the AMI in
 
 ```
-"ami_description": "jambonz feature server"
+"ami_description": "savgw feature server"
 ```
 AMI description.
 
