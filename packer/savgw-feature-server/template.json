@@ -3,7 +3,7 @@
     "region": "us-east-1",
     "ssh_username": "admin",
     "ami_description": "savgw feature server",
-    "instance_type": "t2.xlarge",
+    "instance_type": "c5n.xlarge",
     "drachtio_version": "v0.8.21",
     "jambonz_version": "v0.8.2",
     "ami_base_image_arch": "amd64",
