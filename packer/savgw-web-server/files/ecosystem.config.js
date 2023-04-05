@@ -18,7 +18,7 @@ module.exports = {
 		},
   },
   {
-    name: 'jambonz-webapp',
+    name: 'savgw-webapp',
     script: 'npm',
     cwd: '/home/admin/apps/savgw-webapp',
     args: 'run serve'
