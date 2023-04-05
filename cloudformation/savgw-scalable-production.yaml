@@ -258,7 +258,7 @@ Parameters:
     Default: "G=u$Dj%-97#TffYf"
   URLPortal:
     Type: String
-    Description: "DNS name you will point to the jambonz webserver(s)"
+    Description: "DNS name you will point to the savgw webserver(s)"
     Default: "yourdomain.com"
   JaegerUsername:
     Type: String
@@ -410,7 +410,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Sub '${Prefix}-savgw-ssh-sg'
-      GroupDescription: !Sub 'Security group for ssh to ${Prefix} jambonz cluster'
+      GroupDescription: !Sub 'Security group for ssh to ${Prefix} savgw cluster'
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -1139,7 +1139,7 @@ Resources:
               sudo systemctl daemon-reload
               sudo systemctl restart drachtio
 
-              echo "starting jambonz apps"
+              echo "starting savgw apps"
               sudo -u admin bash -c "pm2 restart /home/admin/apps/ecosystem.config.js"
               sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u admin --hp /home/admin
               sudo -u admin bash -c "pm2 save"
@@ -1150,7 +1150,7 @@ Resources:
               sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
 
               # get an apiban key
-              APIBANKEY=$(curl -X POST -u jambonz:1a074994242182a9e0b67eae93978826 -d "{\"client\": \"$INSTANCE_ID\"}" -s https://apiban.org/sponsor/newkey | jq -r '.ApiKey')
+              APIBANKEY=$(curl -X POST -u savgw:1a074994242182a9e0b67eae93978826 -d "{\"client\": \"$INSTANCE_ID\"}" -s https://apiban.org/sponsor/newkey | jq -r '.ApiKey')
               sudo sed -i -e "s/API-KEY-HERE/$APIBANKEY/g" /usr/local/bin/apiban/config.json
               sudo /usr/local/bin/apiban/apiban-iptables-client FULL
 
@@ -1296,7 +1296,7 @@ Resources:
               #!/bin/bash -e
               #
               # Cache a bucket name on this host
-              echo "running jambonz user data script"   
+              echo "running savgw user data script"   
               echo "writing /home/admin/apps/ecosystem.config.js.."
              
               cat << EOF > /home/admin/apps/ecosystem.config.js
@@ -1719,7 +1719,7 @@ Resources:
               PUBLIC_IP=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
               echo "after retrieving EIP for web server, public IP is $PUBLIC_IP"
             
-              echo "running jambonz webserver user data script"
+              echo "running savgw webserver user data script"
             
               # seed database
               mysql -h ${JAMBONES_MYSQL_HOST} -u admin -D savgwdb -p${JAMBONES_MYSQL_PASSWORD} -e "select count(*) from accounts"
@@ -1729,7 +1729,7 @@ Resources:
                 mysql -h ${JAMBONES_MYSQL_HOST} -u admin -D savgwdb -p${JAMBONES_MYSQL_PASSWORD} < /home/admin/apps/savgw-api-server/db/seed-production-database-open-source.sql
                 JAMBONES_MYSQL_HOST=${JAMBONES_MYSQL_HOST} JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=${JAMBONES_MYSQL_PASSWORD} JAMBONES_MYSQL_DATABASE=jambones /home/admin/apps/savgw-api-server/db/reset_admin_password.js
               fi
-              # jambonz webapp
+              # savgw webapp
               echo "configuring webapp.."
               echo "VITE_API_BASE_URL=http://${URLPortal}/api/v1" > /home/admin/apps/savgw-webapp/.env 
               API_BASE_URL=http://${URLPortal}/api/v1 TAG="<script>window.JAMBONZ = { API_BASE_URL: '$API_BASE_URL'};</script>"
@@ -1944,7 +1944,7 @@ Resources:
 
 Outputs: 
   WebPortalURL:
-    Description: jambonz portal URL, log in with admin/admin and change password
+    Description: savgw portal URL, log in with admin/admin and change password
     Value: !Join [ "", [ "http://", !Ref "URLPortal" ] ]
     Export:
       Name: !Sub '${Prefix}-webserver-url'
