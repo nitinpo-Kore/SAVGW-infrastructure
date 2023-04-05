@@ -68,7 +68,7 @@
         "git config --global advice.detachedHead false",
         "git clone https://github.com/jambonz/jambonz-feature-server.git -b {{user `jambonz_version`}}",
         "git clone https://github.com/jambonz/fsw-clear-old-calls.git -b {{user `jambonz_version`}}",
-        "mv jambonz-feature-server savgw-feature-server"
+        "mv jambonz-feature-server savgw-feature-server",
         "sudo find / -name authorized_keys | sudo xargs -0 -r rm -Rf"
       ]
     },
