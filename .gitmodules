@@ -1,3 +1,0 @@
-[submodule "docker/webapp"]
-	path = docker/webapp
-	url = git@github.com:jambonz/jambonz-webapp.git

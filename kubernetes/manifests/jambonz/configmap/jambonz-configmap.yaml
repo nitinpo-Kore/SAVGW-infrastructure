@@ -1,0 +1,38 @@
+# This file contains the main configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jambonz-env
+  namespace: jambonz
+
+data:
+  NODE_ENV: production
+  CLOUD: gcp
+  K8S: "1"
+  K8S_FEATURE_SERVER_SERVICE_NAME: feature-server
+  K8S_RTPENGINE_SERVICE_NAME: rtpengine-ng:22222
+  K8S_SBC_REGISTER_SERVICE_NAME: sbc-registrar:4000
+  K8S_SBC_OPTIONS_SERVICE_NAME: sbc-options:4000
+  K8S_SBC_INBOUND_SERVICE_NAME: sbc-inbound:4000
+  K8S_SBC_OUTBOUND_SERVICE_NAME: sbc-outbound:4000
+  JAMBONES_TIME_SERIES_HOST: influxdb.jambonz-monitoring
+  JAMBONES_CLUSTER_ID: jbeast2
+  JAMBONES_LOGLEVEL: debug
+  ENABLE_METRICS: "1"
+  STATS_HOST: telegraf.jambonz-monitoring
+  STATS_PORT: "8125"
+  STATS_PROTOCOL: tcp
+  STATS_TELEGRAF: "1"
+  STATS_SAMPLE_RATE: "1"
+  JAMBONES_MYSQL_DATABASE: jambones
+  JAMBONES_MYSQL_HOST: mysql
+  JAMBONES_MYSQL_PASSWORD: jambones
+  JAMBONES_MYSQL_USER: jambones
+  JAMBONES_REDIS_HOST: redis
+  JAMBONES_REDIS_PORT: "6379"
+  DRACHTIO_SECRET: cymru
+  DRACHTIO_HOST: "127.0.0.1"
+  DRACHTIO_PORT: "9022"
+  RTPENGINE_DTMF_LOG_PORT: "22223"
+  RTPENGINE_LOG_LEVEL: "7"
+  JWT_SECRET: G=u%-97#TffYf
