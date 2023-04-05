@@ -1,12 +1,12 @@
 module.exports = {
   apps : [
   {
-    name: 'jambonz-feature-server',
-    cwd: '/home/admin/apps/jambonz-feature-server',
+    name: 'savgw-feature-server',
+    cwd: '/home/admin/apps/savgw-feature-server',
     script: 'app.js',
     instance_var: 'INSTANCE_ID',
-    out_file: '/home/admin/.pm2/logs/jambonz-feature-server.log',
-    err_file: '/home/admin/.pm2/logs/jambonz-feature-server.log',
+    out_file: '/home/admin/.pm2/logs/savgw-feature-server.log',
+    err_file: '/home/admin/.pm2/logs/savgw-feature-server.log',
     exec_mode: 'fork',
     instances: 1,
     autorestart: true,
@@ -21,7 +21,7 @@ module.exports = {
       JAMBONES_GATHER_EARLY_HINTS_MATCH: 1,
       JAMBONES_MYSQL_USER: '${JAMBONES_MYSQL_USER}',
       JAMBONES_MYSQL_PASSWORD: '${JAMBONES_MYSQL_PASSWORD}',
-      JAMBONES_MYSQL_DATABASE: 'jambones',
+      JAMBONES_MYSQL_DATABASE: 'savgwdb',
       JAMBONES_MYSQL_CONNECTION_LIMIT: 10,
       JAMBONES_REDIS_HOST: '${JAMBONES_REDIS_HOST}',
       JAMBONES_REDIS_PORT: 6379,
@@ -32,7 +32,7 @@ module.exports = {
       DRACHTIO_SECRET: 'cymru',
       JAMBONES_SBCS: '172.31.32.100:5060',
       JAMBONES_FEATURE_SERVERS: '127.0.0.1:9023:cymru',
-      JAMBONES_FREESWITCH: '127.0.0.1:8021:JambonzR0ck$'
+      JAMBONES_FREESWITCH: '127.0.0.1:8021:Samrtassistgw11$'
 		}
   }]
 };
