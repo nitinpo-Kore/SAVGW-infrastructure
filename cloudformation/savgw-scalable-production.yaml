@@ -1727,7 +1727,7 @@ Resources:
               if [ $ret -ne 0 ]; then
                 mysql -h ${JAMBONES_MYSQL_HOST} -u admin -D savgwdb -p${JAMBONES_MYSQL_PASSWORD} < /home/admin/apps/savgw-api-server/db/jambones-sql.sql
                 mysql -h ${JAMBONES_MYSQL_HOST} -u admin -D savgwdb -p${JAMBONES_MYSQL_PASSWORD} < /home/admin/apps/savgw-api-server/db/seed-production-database-open-source.sql
-                JAMBONES_MYSQL_HOST=${JAMBONES_MYSQL_HOST} JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=${JAMBONES_MYSQL_PASSWORD} JAMBONES_MYSQL_DATABASE=jambones /home/admin/apps/savgw-api-server/db/reset_admin_password.js
+                JAMBONES_MYSQL_HOST=${JAMBONES_MYSQL_HOST} JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=${JAMBONES_MYSQL_PASSWORD} JAMBONES_MYSQL_DATABASE=savgwdb /home/admin/apps/savgw-api-server/db/reset_admin_password.js
               fi
               # savgw webapp
               echo "configuring webapp.."
