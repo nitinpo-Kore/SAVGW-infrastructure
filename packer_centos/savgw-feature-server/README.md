@@ -1,6 +1,6 @@
 # savgw-feature-server
 
-A [packer](https://www.packer.io/) template to build an AMI for the savgw feature server.  The base linux distro is Debian 10 (buster).
+A [packer](https://www.packer.io/) template to build an AMI for the savgw feature server.  The base linux distro is Centos.
 
 ## Installing 
 
