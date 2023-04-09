@@ -23,3 +23,7 @@ sudo chown -R admin:admin  /home/admin/apps
 
 sudo cp /tmp/auto-assign-elastic-ip.sh /usr/local/bin
 sudo chmod +x /usr/local/bin/auto-assign-elastic-ip.sh
+
+#Copying Kore Logob and TLS config
+cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
+cp -rvf /tmp/korevg.conf /etc/nginx/snippets/korevg.conf

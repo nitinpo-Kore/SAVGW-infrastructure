@@ -18,3 +18,7 @@ sudo systemctl enable drachtio
 
 sudo cp /tmp/auto-assign-elastic-ip.sh /usr/local/bin
 sudo chmod +x /usr/local/bin/auto-assign-elastic-ip.sh
+
+# Copy Certificate file from tmp 
+mkdir -p /etc/ssl/private/
+cp -rvf /tmp/*.pem /etc/ssl/private/

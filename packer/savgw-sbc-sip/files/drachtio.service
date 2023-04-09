@@ -1,4 +1,3 @@
-
 [Unit]
 Description=drachtio
 After=syslog.target network.target local-fs.target
@@ -6,12 +5,13 @@ After=syslog.target network.target local-fs.target
 [Service]
 ; service
 Type=forking
-ExecStartPre=/bin/sh -c 'systemctl set-environment LOCAL_IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`'
-ExecStartPre=/bin/sh -c 'systemctl set-environment PUBLIC_IP=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`'
-ExecStart=/usr/local/bin/drachtio --daemon --contact sip:${LOCAL_IP};transport=udp --external-ip ${PUBLIC_IP} \
- --contact sip:${LOCAL_IP};transport=tcp \
- --address 0.0.0.0 --port 9022 \
- --prometheus-scrape-port 9090
+ExecStartPre=/bin/sh -c 'systemctl set-environment LOCAL_IP=`hostname -I`'
+ExecStartPre=/bin/sh -c 'systemctl set-environment PUBLIC_IP=`curl ifconfig.me`'
+ExecStart=/usr/local/bin/drachtio --daemon \
+--contact sip:${LOCAL_IP}:5060;transport=udp,tcp --external-ip ${PUBLIC_IP} \
+--contact sips:${LOCAL_IP}:5061;transport=tls --external-ip ${PUBLIC_IP} \
+--contact sips:${LOCAL_IP}:8443;transport=wss --external-ip ${PUBLIC_IP} \
+
 TimeoutSec=15s
 Restart=always
 ; exec
@@ -28,6 +28,5 @@ IOSchedulingPriority=2
 CPUSchedulingPolicy=rr
 CPUSchedulingPriority=89
 UMask=0007
-
 [Install]
 WantedBy=multi-user.target
