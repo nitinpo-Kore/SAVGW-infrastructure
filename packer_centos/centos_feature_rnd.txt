@@ -1,0 +1,54 @@
+   24  su admin
+   25  ssh-keygen -t rsa
+   26  cat /root/.ssh/id_rsa.pub >> /home/admin/.ssh/authorized_keys
+   27  cat /home/admin/.ssh/authorized_keys
+   28  ls -lrth /home/admin/.ssh/authorized_keys
+   29  chown -R admin:admin /home/admin/.ssh/authorized_keys
+   30  ssh admin@192.168.0.107
+   31  inti 0
+   32  init 0
+   33  ip a
+   34  yum install packer
+   35  sudo yum -y install packer
+   36  sudo yum install -y yum-utils
+   37  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+   38  sudo yum -y install packer
+   39  init 0
+   40  cd /root/savgw-feature-server/
+   41  sudo systemctl stop firewalld
+   42  ip a
+   43  yum remove nftables
+   44  yum -y remove nftables
+   45  sestatus
+   46  sudo setenforce 0
+   47  sestatus
+   48  sudo setenforce 0
+   49  sestatus
+   50  getenforce
+   51  sudo setenforce Permissive
+   52  getenforce
+   53  sudo vi /etc/selinux/config
+   54  cat /etc/selinux/config
+   55  sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+
+
+below is sudo install
+
+
+"sudo dnf -y install python3 lsof kernel-devel gcc gcc-c++ make cmake  git autoconf automake mysql redis",
+"sudo dnf -y install curl telnet libtool libtool-ltdl-devel openssl-devel libcurl-devel zlib-devel lz4-devel",
+"sudo dnf install iptables-devel",
+"sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm",
+"sudo yum install https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm",
+"sudo yum install http://rpmfind.net/linux/epel/7/x86_64/Packages/s/SDL2-2.0.14-2.el7.x86_64.rpm",
+"sudo yum install ffmpeg ffmpeg-devel",
+"sudo dnf --enablerepo=powertools install lua-devel",
+"sudo dnf -y install libevent-devel json-glib-devel redhat-lsb-core",
+"sudo dnf --enablerepo=powertools install libpcap-devel install xmlrpc-c-devel python3-markdown gperf gnupg2 wget pkg-config ca-certificates",
+"sudo dnf install hiredis-devel spandsp-devel mariadb-devel htop bind-utils gdb google-perftools",
+"sudo dnf install libjpeg-turbo-devel sqlite-devel pcre-devel",
+"sudo dnf --enablerepo=powertools install ldns-devel",
+"sudo dnf --enablerepo=powertools install libedit-devel yasm",
+"sudo dnf install lvalgrind haveged",
+"sudo dnf --enablerepo=powertools install speex-devel speexdsp-devel libsndfile-devel libshout-devel libmpg123-devel opus-devel opusfile-devel gperftools-devel lame-devel",
+

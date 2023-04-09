@@ -4,7 +4,7 @@ A [packer](https://www.packer.io/) template to build an AMI containing everythin
 
 ##SSL Certificate
 
-Keep all the three Certifcate inside before running packer script savgw-sbc-sip
+Keep all the three Certifcate inside before running packer script savgw-sbc-sip/files/
 
 ## Installing 
 

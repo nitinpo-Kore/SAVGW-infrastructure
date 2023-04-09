@@ -27,3 +27,7 @@ sudo chmod +x /usr/local/bin/auto-assign-elastic-ip.sh
 #Copying Kore Logob and TLS config
 cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
 cp -rvf /tmp/korevg.conf /etc/nginx/snippets/korevg.conf
+
+#Rename of title
+sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
+sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/index.html
