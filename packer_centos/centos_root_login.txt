@@ -1,0 +1,40 @@
+ssh-keygen -t rsa 
+
+Sudo User Creation
+useradd admin
+
+passwd -d admin
+
+usermod -aG wheel admin
+
+cat >> /etc/sudoers << EOF
+## Same thing without a password
+%wheel ALL=(ALL)       NOPASSWD: ALL
+EOF
+
+then login into admin
+
+su admin
+
+sudo ls -l /root 
+or
+sudo -i
+
+
+then in admin login
+
+su admin
+
+ssh-keygen -t rsa
+
+it will create folder of ssh 
+
+cd /home/admin/.ssh/
+
+cat /root/.ssh/id_rsa.pub >> /home/admin/.ssh/authorized_keys
+
+chown -R admin:admin /home/admin/.ssh/authorized_keys
+
+
+
+
