@@ -21,7 +21,7 @@ export VPC_CIDR="[Enter VPC Subnet for example :10.160.0.0/24]"
 export JWT_SECRET="8q%Ed2f3H4*#v2Bn"
 export OTEL_TRACING="1"
 
-export AWS_REGION="[Enter The AWS Reagion Name]"
+export AWS_REGION="[Enter The AWS Region Name]"
 export AWS_SNS_TOPIC_ARN
 
 
