@@ -2,6 +2,10 @@
 
 A [packer](https://www.packer.io/) template to build an AMI containing everything needed to run savgw on a single EC2 instance.  The base linux distro is Debian 11 (bullseye).
 
+##SSL Certificate
+
+Keep all the three Certifcate inside before running packer script savgw-sbc-sip
+
 ## Installing 
 
 To build an amd64 image:
