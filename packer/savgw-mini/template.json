@@ -83,7 +83,7 @@
         "git clone https://github.com/jambonz/jambonz-api-server.git -b {{user `jambonz_version`}}",
         "git clone https://github.com/jambonz/jambonz-webapp.git -b {{user `jambonz_version`}}",
         "git clone https://github.com/jambonz/jambonz-smpp-esme.git -b {{user `jambonz_version`}}",
-        "git clone https://github.com/jambonz/sbc-rtpengine-sidecar.git -b {{user `jambonz_version`}}"
+        "git clone https://github.com/jambonz/sbc-rtpengine-sidecar.git -b {{user `jambonz_version`}}",
         "mv jambonz-feature-server savgw-feature-server",
         "mv jambonz-api-server savgw-api-server",
         "mv jambonz-webapp savgw-webapp",
