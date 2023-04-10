@@ -12,7 +12,4 @@ sudo systemctl restart nginx
 
 # NB: customization of sites-availble handled in terraform / cloudformation userdatra scripts
 
-# Copy Certificate file from tmp 
-mkdir -p /etc/ssl/private/
-cp -rvf /tmp/*.pem /etc/ssl/private/
 
