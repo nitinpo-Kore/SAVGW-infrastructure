@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
   InstanceType:
-    Description: jambonzMini EC2 instance type
+    Description: savgwMini EC2 instance type
     Type: String
     Default: t2.medium
     AllowedValues:
@@ -56,7 +56,7 @@ Parameters:
     AllowedPattern: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2}
     Default: 10.0.0.0/16
   Cloudwatch:
-    Description: Send jambonz logs to cloudwatch
+    Description: Send savgw logs to cloudwatch
     Type: String
     Default: true
     AllowedValues: [true, false]
@@ -77,7 +77,7 @@ Parameters:
       - 150
   URLPortal:
     Type: String
-    Description: "(Optional) A DNS name that you will point to the jambonz webserver(s)"
+    Description: "(Optional) A DNS name that you will point to the savgw webserver(s)"
     Default: ""
   JaegerUsername:
       Type: String
@@ -110,7 +110,7 @@ Resources:
     Type: AWS::IAM::Role
     Condition: ShouldEnableCloudWatch
     Properties: 
-      Description: jambonz mini IAM role
+      Description: savgw mini IAM role
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -149,14 +149,14 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       CidrBlock: !Ref VpcCidr
-  jambonzInstanceProfile:
+  savgwInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Condition: ShouldEnableCloudWatch
     Properties:
       Path: /
       Roles:
         - !Ref IamCloudwatchRole
-  jambonzInstance:
+  savgwInstance:
     Type: 'AWS::EC2::Instance'
     Properties:
       InstanceType: !Ref InstanceType
@@ -166,7 +166,7 @@ Resources:
       KeyName: !Ref KeyName
       NetworkInterfaces:
         - GroupSet:
-            - !Ref jambonzSecurityGroup
+            - !Ref savgwSecurityGroup
             - !Ref sshSecurityGroup
           AssociatePublicIpAddress: true
           DeviceIndex: '0'
@@ -191,7 +191,7 @@ Resources:
               
               # change the database password to the instance id
               NEW_DB_PASSWD="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" 
-              echo "alter user 'admin'@'%' identified by '$NEW_DB_PASSWD'" | mysql -h localhost -u admin -D jambones -pJambonzR0ck$ 
+              echo "alter user 'admin'@'%' identified by '$NEW_DB_PASSWD'" | mysql -h localhost -u admin -D savgwdb -pSamrtassistgw11$ 
               sudo sed -i -e "s/\(.*\)JAMBONES_MYSQL_PASSWORD.*/\1JAMBONES_MYSQL_PASSWORD: '$NEW_DB_PASSWD',/g" /home/admin/apps/ecosystem.config.js 
               
               # replace ip addresses in the ecosystem.config.js file
@@ -204,7 +204,7 @@ Resources:
               sudo sed -i -e "s/\(.*\)JWT-SECRET-GOES_HERE\(.*\)/\1$uuid\2/g" /home/admin/apps/ecosystem.config.js 
 
               # reset the database
-              JAMBONES_ADMIN_INITIAL_PASSWORD=$INSTANCE_ID JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=$NEW_DB_PASSWD JAMBONES_MYSQL_DATABASE=jambones JAMBONES_MYSQL_HOST=localhost /home/admin/apps/jambonz-api-server/db/reset_admin_password.js
+              JAMBONES_ADMIN_INITIAL_PASSWORD=$INSTANCE_ID JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=$NEW_DB_PASSWD JAMBONES_MYSQL_DATABASE=savgwdb JAMBONES_MYSQL_HOST=localhost /home/admin/apps/jambonz-api-server/db/reset_admin_password.js
 
               #Add BasicAuth password for Jaeger
               sudo htpasswd -b -c /etc/nginx/.htpasswd ${JaegerUsername} "${JaegerPassword}"
@@ -212,14 +212,14 @@ Resources:
               # configure webapp
               if [[ -z "${URLPortal}" ]]; then
                 # portals will be accessed by IP address of server
-                echo "VITE_API_BASE_URL=http://$PUBLIC_IPV4/api/v1" > /home/admin/apps/jambonz-webapp/.env 
+                echo "VITE_API_BASE_URL=http://$PUBLIC_IPV4/api/v1" > /home/admin/apps/savgw-webapp/.env 
                 API_BASE_URL=http://$PUBLIC_IPV4/api/v1 TAG="<script>window.JAMBONZ = { API_BASE_URL: '$API_BASE_URL'};</script>"
-                sed -i -e "\@</head>@i\ $TAG" /home/admin/apps/jambonz-webapp/dist/index.html
+                sed -i -e "\@</head>@i\ $TAG" /home/admin/apps/savgw-webapp/dist/index.html
               else
                 # portals will be accessed by DNS name
-                echo "VITE_API_BASE_URL=http://${URLPortal}/api/v1" > /home/admin/apps/jambonz-webapp/.env 
+                echo "VITE_API_BASE_URL=http://${URLPortal}/api/v1" > /home/admin/apps/savgw-webapp/.env 
                 API_BASE_URL=http://${URLPortal}/api/v1 TAG="<script>window.JAMBONZ = { API_BASE_URL: '$API_BASE_URL'};</script>"
-                sed -i -e "\@</head>@i\ $TAG" /home/admin/apps/jambonz-webapp/dist/index.html
+                sed -i -e "\@</head>@i\ $TAG" /home/admin/apps/savgw-webapp/dist/index.html
               
                 sudo cat << EOF > /etc/nginx/sites-available/default 
                 server {
@@ -313,7 +313,7 @@ Resources:
               JaegerUsername: !Ref JaegerUsername
               JaegerPassword: !Ref JaegerPassword
 
-  jambonzSecurityGroup:
+  savgwSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       VpcId: !Ref VPC
@@ -442,14 +442,14 @@ Outputs:
         - !GetAtt 
           - jambonzInstance
           - PublicIp
-    Description: URL for the jambonz portal
+    Description: URL for the savgw portal
     Condition: DontCreateDNS
   PortalURL:
     Value: !Join 
       - ''
       - - 'http://'
         - !Ref URLPortal
-    Description: URL for the jambonz portal
+    Description: URL for the savgw portal
     Condition: CreateDNS
   GrafanaURL:
     Value: !Join 
@@ -474,13 +474,13 @@ Outputs:
     Condition: CreateDNS
   ServerIP:
     Value: !GetAtt 
-      - jambonzInstance
+      - savgwInstance
       - PublicIp
     Description: Server IP address - create a DNS record for this domain as well as subdomains grafana, homer, and jaeger
     Condition: CreateDNS
   User:
     Value: admin
-    Description: Login username for the jambonz portal
+    Description: Login username for the savgw portal
   Password:
-    Value: !Ref jambonzInstance
-    Description: Initial password for jambonz portal.  You will be forced to change it once you log in for the first time.
+    Value: !Ref savgwInstance
+    Description: Initial password for savgw portal.  You will be forced to change it once you log in for the first time.
