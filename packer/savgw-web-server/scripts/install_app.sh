@@ -31,3 +31,10 @@ cp -rvf /tmp/korevg.conf /etc/nginx/snippets/korevg.conf
 #Rename of title
 sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
 sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/index.html
+
+
+sed -i 's/github.com/jambonz/Kore.ai is on/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/github.com\/jambonz/kore.ai/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/alt="jambonz"/alt="kore"/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/GitHub/Kore/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+
