@@ -30,7 +30,7 @@ cd /home/admin/apps/sbc-rtpengine-sidecar && npm ci --unsafe-perm
 sudo npm install -g pino-pretty pm2 pm2-logrotate gulp grunt
 sudo pm2 install pm2-logrotate
 
-echo "0 *	* * * root    fsw-clear-old-calls --password JambonzR0ck$ >> /var/log/fsw-clear-old-calls.log 2>&1" | sudo tee -a /etc/crontab
+echo "0 *	* * * root    fsw-clear-old-calls --password Samrtassistgw11$ >> /var/log/fsw-clear-old-calls.log 2>&1" | sudo tee -a /etc/crontab
 echo "0 1	* * * root    find /tmp -name \"*.mp3\" -mtime +2 -exec rm {} \; > /dev/null 2>&1" | sudo tee -a /etc/crontab
 
 sudo -u admin bash -c "pm2 install pm2-logrotate"
@@ -41,3 +41,24 @@ sudo -u admin bash -c "pm2 set pm2-logrotate:compress true"
 sudo chown -R admin:admin  /home/admin/apps
 
 sudo rm /home/admin/apps/savgw-webapp/.env
+
+
+
+#Copying Kore Logob and TLS config
+cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
+cp -rvf /tmp/korevg.conf /etc/nginx/snippets/korevg.conf
+
+# Copy Certificate file from tmp 
+mkdir -p /etc/ssl/private/
+cp -rvf /tmp/*.pem /etc/ssl/private/
+
+
+#Rename of title
+sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
+sed -i 's/Jambonz/SAVGW/g' /home/admin/apps/savgw-webapp/index.html
+
+sed -i 's/jambonz is open source MIT on/Kore.ai is on/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/github.com\/jambonz/kore.ai/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/alt="jambonz"/alt="kore"/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/GitHub/Kore/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+

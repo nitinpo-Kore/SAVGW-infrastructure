@@ -7,33 +7,33 @@
       "files": {
         "collect_list": [
           {
-            "file_path": "/home/admin/.pm2/logs/jambonz-feature-server.log",
-            "log_group_name": "jambonz-feature_server",
+            "file_path": "/home/admin/.pm2/logs/savgw-feature-server.log",
+            "log_group_name": "savgw-feature_server",
             "log_stream_name": "feature-server {ip_address} {instance_id}",
             "retention_in_days": 3
           },
           {
-            "file_path": "/home/admin/.pm2/logs/jambonz-sbc-inbound.log",
-            "log_group_name": "jambonz-sbc-sip-inbound",
+            "file_path": "/home/admin/.pm2/logs/savgw-sbc-inbound.log",
+            "log_group_name": "savgw-sbc-sip-inbound",
             "log_stream_name": "sbc-inbound {ip_address} {instance_id}",
             "retention_in_days": 3
           },
           {
-            "file_path": "/home/admin/.pm2/logs/jambonz-sbc-outbound.log",
-            "log_group_name": "jambonz-sbc-sip",
+            "file_path": "/home/admin/.pm2/logs/savgw-sbc-outbound.log",
+            "log_group_name": "savgw-sbc-sip",
             "log_stream_name": "sbc-outbound {ip_address} {instance_id}",
             "retention_in_days": 3
           },
           {
-            "file_path": "/home/admin/.pm2/logs/jambonz-sbc-sip-sidecar.log",
-            "log_group_name": "jambonz-sbc-sip-sidecar",
+            "file_path": "/home/admin/.pm2/logs/savgw-sbc-sip-sidecar.log",
+            "log_group_name": "savgw-sbc-sip-sidecar",
             "log_stream_name": "sbc-sip-sidecar {ip_address} {instance_id}",
             "retention_in_days": 3
           },
           {
-            "file_path": "/home/admin/.pm2/logs/jambonz-api-server.log",
-            "log_group_name": "jambonz-api-server",
-            "log_stream_name": "jambonz-api-server-{ip_address} {instance_id}",
+            "file_path": "/home/admin/.pm2/logs/savgw-api-server.log",
+            "log_group_name": "savgw-api-server",
+            "log_stream_name": "savgw-api-server-{ip_address} {instance_id}",
             "retention_in_days": 3
           },
           {

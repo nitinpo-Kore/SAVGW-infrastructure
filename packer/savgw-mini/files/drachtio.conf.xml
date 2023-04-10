@@ -12,7 +12,12 @@
         </contacts>
 
         <udp-mtu>8192</udp-mtu>
-
+	        <tls>	
+                <min-tls-version>1.2</min-tls-version>	
+                <key-file>/etc/ssl/private/key.pem</key-file>	
+                <cert-file>/etc/ssl/private/cert.pem</cert-file>	
+                <chain-file>/etc/ssl/private/ca.pem</chain-file>	
+                </tls>
     </sip>
 
     <cdrs>false</cdrs>
@@ -24,12 +29,12 @@
             <archive>/var/log/drachtio/archive</archive>
             <size>100</size>
             <maxSize>10000</maxSize>
-            <auto-flush>false</auto-flush>
+            <auto-flush>true</auto-flush>
         </file>
 
         <sofia-loglevel>3</sofia-loglevel>
 
-        <loglevel>info</loglevel>
+        <loglevel>debug</loglevel>
     </logging>
 
 </drachtio>
