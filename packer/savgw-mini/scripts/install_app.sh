@@ -6,6 +6,15 @@ DB_PASS=$3
 cd /home/admin
 cp /tmp/ecosystem.config.js apps
 
+
+#Rename of Main WEB page
+
+sed -i 's/jambonz is open source MIT on/Kore.ai /g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/github.com\/jambonz/kore.ai/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/alt="jambonz"/alt="kore"/g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/<Icons.GitHub \/>/ /g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+sed -i 's/<span>GitHub<\/span>/ /g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
+
 echo "building savgw-feature-server.."
 cd /home/admin/apps/savgw-feature-server && npm ci --unsafe-perm
 echo "building fsw-clear-old-calls.."
