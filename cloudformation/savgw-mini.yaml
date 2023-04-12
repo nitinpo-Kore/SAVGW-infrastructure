@@ -4,7 +4,7 @@ Parameters:
   InstanceType:
     Description: savgwMini EC2 instance type
     Type: String
-    Default: t2.medium
+    Default: c6i.2xlarge
     AllowedValues:
       - t2.small
       - t2.medium
@@ -161,7 +161,7 @@ Resources:
     Properties:
       InstanceType: !Ref InstanceType
       IamInstanceProfile: 
-        !If [ShouldEnableCloudWatch, !Ref jambonzInstanceProfile, !Ref "AWS::NoValue"]
+        !If [ShouldEnableCloudWatch, !Ref savgwInstanceProfile, !Ref "AWS::NoValue"]
       ImageId: !FindInMap [ "AWSRegion2AMI", !Ref AWS::Region,  "Ami"]
       KeyName: !Ref KeyName
       NetworkInterfaces:
@@ -204,7 +204,7 @@ Resources:
               sudo sed -i -e "s/\(.*\)JWT-SECRET-GOES_HERE\(.*\)/\1$uuid\2/g" /home/admin/apps/ecosystem.config.js 
 
               # reset the database
-              JAMBONES_ADMIN_INITIAL_PASSWORD=$INSTANCE_ID JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=$NEW_DB_PASSWD JAMBONES_MYSQL_DATABASE=savgwdb JAMBONES_MYSQL_HOST=localhost /home/admin/apps/jambonz-api-server/db/reset_admin_password.js
+              JAMBONES_ADMIN_INITIAL_PASSWORD=$INSTANCE_ID JAMBONES_MYSQL_USER=admin JAMBONES_MYSQL_PASSWORD=$NEW_DB_PASSWD JAMBONES_MYSQL_DATABASE=savgwdb JAMBONES_MYSQL_HOST=localhost /home/admin/apps/savgw-api-server/db/reset_admin_password.js
 
               #Add BasicAuth password for Jaeger
               sudo htpasswd -b -c /etc/nginx/.htpasswd ${JaegerUsername} "${JaegerPassword}"
@@ -298,11 +298,11 @@ cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--
 
               # enable cloudwatch
               if [[ "${Cloudwatch}" == "true" ]]; then
-                echo "Enabling Cloudwatch for jambonz logs"
+                echo "Enabling Cloudwatch for savgw logs"
                 sudo sed -i -e "s/retention_in_days\": 3/retention_in_days\": ${CloudwatchLogRetention}/g" /opt/aws/amazon-cloudwatch-agent/bin/config.json 
                 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
               else
-                echo "Cloudwatch is not enabled for jambonz logs"
+                echo "Cloudwatch is not enabled for savgw logs"
                 sudo sed -i -e "s/combine_logs: true/combine_logs: false/g" /home/admin/apps/ecosystem.config.js 
               fi
               sudo -u admin bash -c "pm2 restart /home/admin/apps/ecosystem.config.js" 
@@ -438,7 +438,7 @@ cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--
   EIPAssociation:
     Type: 'AWS::EC2::EIPAssociation'
     Properties:
-      InstanceId: !Ref jambonzInstance
+      InstanceId: !Ref savgwInstance
       AllocationId: !GetAtt EIP.AllocationId
 
 Outputs:
@@ -447,7 +447,7 @@ Outputs:
       - ''
       - - 'http://'
         - !GetAtt 
-          - jambonzInstance
+          - savgwInstance
           - PublicIp
     Description: URL for the savgw portal
     Condition: DontCreateDNS
