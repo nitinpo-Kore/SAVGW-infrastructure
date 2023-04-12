@@ -24,6 +24,7 @@ Parameters:
       - c5n.large
       - c5n.xlarge
       - c5n.2xlarge
+      - c6i.2xlarge
     ConstraintDescription: must be a valid EC2 instance type.
   KeyName:
     Description: Name of an EC2 KeyPair to enable SSH access to the instance.
@@ -103,7 +104,7 @@ Conditions:
 Mappings:
   AWSRegion2AMI:
     us-east-1:
-      Ami: ami-0eedbdac5ab1b336f
+      Ami: ami-036bb2ffa69df5834
 
 Resources:
   IamCloudwatchRole:
@@ -282,14 +283,7 @@ Resources:
                   }
                 }
               EOF
-
-
-#Rename of title and copy logo
-sed -i 's/Jambonz Web App/SAVGW Web App/g' /home/admin/apps/savgw-webapp/dist/index.html
-sed -i 's/Simple provisioning webapp for jambonz/Simple provisioning webapp for SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
-#keep kore logo with name jambonz--light.svg in tmp directory
-cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
-             
+              
                 sudo systemctl restart nginx
               fi
               
