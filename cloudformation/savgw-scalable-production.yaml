@@ -1187,7 +1187,7 @@ Resources:
       LaunchConfigurationName: !Ref SbcSipConfig
       MinSize: 1
       MaxSize: 4
-      DesiredCapacity: 1
+      DesiredCapacity: 2
       TerminationPolicies:
        - OldestInstance
       VPCZoneIdentifier: 
@@ -1405,8 +1405,8 @@ Resources:
       AutoScalingGroupName: !Sub '${Prefix}-feature-server-autoscaling-group'
       LaunchConfigurationName: !Ref FeatureServerConfig
       MinSize: 1
-      MaxSize: 2
-      DesiredCapacity: 1
+      MaxSize: 6
+      DesiredCapacity: 3
       TerminationPolicies:
        - OldestInstance
       VPCZoneIdentifier: 
@@ -1594,7 +1594,7 @@ Resources:
       LaunchConfigurationName: !Ref SbcRTPConfig
       MinSize: 1
       MaxSize: 4
-      DesiredCapacity: 1
+      DesiredCapacity: 2
       TerminationPolicies:
        - OldestInstance
       VPCZoneIdentifier: 
@@ -1936,8 +1936,8 @@ Resources:
       AutoScalingGroupName: !Sub '${Prefix}-webserver-autoscaling-group'
       LaunchConfigurationName: !Ref WebServerConfig
       MinSize: 1
-      MaxSize: 1
-      DesiredCapacity: 1
+      MaxSize: 2
+      DesiredCapacity: 2
       TerminationPolicies:
       - OldestInstance
       VPCZoneIdentifier: 
