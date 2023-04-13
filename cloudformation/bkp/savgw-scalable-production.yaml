@@ -1833,63 +1833,66 @@ Resources:
               #Add BasicAuth password for Jaeger
               sudo htpasswd -b -c /etc/nginx/.htpasswd ${JaegerUsername} "${JaegerPassword}"
               
-              sudo cat << EOF > /etc/nginx/sites-available/ssl 
+              sudo cat << EOF > /etc/nginx/sites-available/default 
               server {
-                 listen 443 ssl;
-                 include snippets/korevg.conf;
-                 server_name ${URLPortal};
-                 location /api/ {
-                     rewrite ^/api/(.*)$ /$1 break;
-                     proxy_pass http://localhost:3000;
-                     proxy_set_header Host $host;
-                     }
-               location / {
-                  proxy_pass http://localhost:3001;
-                  proxy_set_header Host $host;
-                 }
-             }
-
-		server {
-                listen 443 ssl;
- 	        server_name grafana.${URLPortal};
- 		include snippets/korevg.conf;
- 		 location / {
-   			 proxy_pass http://${MONITORING_SERVER_IP}:3000;
-   			 proxy_http_version 1.1;
-    			 proxy_set_header Upgrade $http_upgrade;
-    			 proxy_set_header Connection 'upgrade';
-                         proxy_set_header Host $host;
-                         proxy_cache_bypass $http_upgrade;
-                         }
-                        }
-
-			server {
-  			listen 443 ssl;
-  			server_name homer.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:9080;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
-
-server {
-  listen 443 ssl;
-  server_name jaeger.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:16686;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
+                  listen 80;
+                  server_name ${URLPortal};
+                  location /api/ {
+                      rewrite ^/api/(.*)$ /\$1 break;
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+                  location / {
+                      proxy_pass http://localhost:3001;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
+                  listen 80;
+                  server_name api.${URLPortal};
+                  location / {
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
+                listen 80;
+                server_name grafana.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:3000; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 80;
+                server_name homer.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:9080; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 80;
+                server_name jaeger.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:16686; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                  auth_basic "Secured Endpoint";
+                  auth_basic_user_file /etc/nginx/.htpasswd;
+                }
+              }
               EOF
             
               sudo systemctl restart nginx

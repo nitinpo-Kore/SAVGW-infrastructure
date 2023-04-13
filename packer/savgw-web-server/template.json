@@ -3,7 +3,7 @@
     "region": "us-east-1",
     "ssh_username": "admin",
     "ami_description": "savgw webserver", 
-    "instance_type": "c5n.xlarge",
+    "instance_type": "c6i.xlarge",
     "jambonz_version": "v0.8.2",
     "ami_base_image_arch": "amd64",
     "ami_base_image_owner": "136693071363",

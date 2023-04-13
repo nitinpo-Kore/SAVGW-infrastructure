@@ -43,6 +43,9 @@ cp -rvf /tmp/*.pem /etc/ssl/private/
 #Rename of title and copy logo
 sed -i 's/Jambonz Web App/SAVGW Web App/g' /home/admin/apps/savgw-webapp/dist/index.html
 sed -i 's/Simple provisioning webapp for jambonz/Simple provisioning webapp for SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
+
 #keep kore logo with name jambonz--light.svg
-cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
+cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/public/svg/jambonz--light.svg
+cp -rvf /tmp/jambonz--light.svg /home/admin//apps/savgw-webapp/public/svg/jambonz.svg
+cp -rvf /tmp/favicon.ico /home/admin/apps/savgw-webapp/public/favicon.ico
 

@@ -3,7 +3,7 @@
     "region": "us-east-1",
     "ssh_username": "admin",
     "ami_description": "savgw SBC SIP", 
-    "instance_type": "c5n.xlarge",
+    "instance_type": "c6i.xlarge",
     "drachtio_version": "v0.8.21",
     "jambonz_version": "v0.8.2",
     "ami_base_image_arch": "amd64",
