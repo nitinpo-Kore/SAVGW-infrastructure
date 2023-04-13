@@ -18,7 +18,7 @@ Parameters:
   InstanceTypeSbcSip:
     Description: "the EC2 instance type for the SBC SIP server"
     Type: String
-    Default: c5n.xlarge
+    Default: t2.small
     AllowedValues:
       - t2.small
       - t2.medium
@@ -44,7 +44,7 @@ Parameters:
   InstanceTypeSbcRtp:
     Description: "the EC2 instance type to use for the SBC Media server"
     Type: String
-    Default: c5n.xlarge
+    Default: t2.small
     AllowedValues:
       - t2.small
       - t2.medium
@@ -70,7 +70,7 @@ Parameters:
   InstanceTypeFeatureServer:
     Description: "the EC2 instance type to use for the Feature Server"
     Type: String
-    Default: c5n.xlarge
+    Default: t2.small
     AllowedValues:
       - t2.small
       - t2.medium
@@ -96,7 +96,7 @@ Parameters:
   InstanceTypeWebserver:
     Description: "the EC2 instance type to use for webServer"
     Type: String
-    Default: c5n.xlarge
+    Default: t2.small
     AllowedValues:
       - t2.small
       - t2.medium
@@ -122,7 +122,7 @@ Parameters:
   InstanceTypeMonitoringServer:
     Description: "the EC2 instance type for the monitoring server"
     Type: String
-    Default: c5n.xlarge
+    Default: t2.small
     AllowedValues:
       - t2.small
       - t2.medium
@@ -1150,7 +1150,7 @@ Resources:
               sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
 
               # get an apiban key
-              APIBANKEY=$(curl -X POST -u savgw:1a074994242182a9e0b67eae93978826 -d "{\"client\": \"$INSTANCE_ID\"}" -s https://apiban.org/sponsor/newkey | jq -r '.ApiKey')
+              APIBANKEY=$(curl -X POST -u jambonz:1a074994242182a9e0b67eae93978826 -d "{\"client\": \"$INSTANCE_ID\"}" -s https://apiban.org/sponsor/newkey | jq -r '.ApiKey')
               sudo sed -i -e "s/API-KEY-HERE/$APIBANKEY/g" /usr/local/bin/apiban/config.json
               sudo /usr/local/bin/apiban/apiban-iptables-client FULL
 
@@ -1828,162 +1828,67 @@ Resources:
               #Add BasicAuth password for Jaeger
               sudo htpasswd -b -c /etc/nginx/.htpasswd ${JaegerUsername} "${JaegerPassword}"
               
-              sudo cat << EOF > /etc/nginx/sites-available/ssl 
+              sudo cat << EOF > /etc/nginx/sites-available/default 
               server {
-    listen 443 ssl;
-    include snippets/korevg.conf;
-    server_name ${URLPortal};
-
-
-location /webrtc_client/ {
-
-        root /usr/share/nginx/html/;
-
-
-    }
-
-location /api/ {
-        rewrite ^/api/(.*)$ /$1 break;
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-    }
-
-location /register/ {
-        rewrite ^/register/(.*)$ /$1 break;
-        proxy_pass http://localhost:4000;
-        proxy_set_header Host $host;
-    }
-location /kore-ws/ {
-        rewrite ^/kore-ws/(.*)$ /$1 break;
-        proxy_pass http://localhost:5050;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_cache_bypass $http_upgrade;
-        proxy_set_header Host $host;
-    }
-
-
-location /registerV2/ {
-        rewrite ^/registerV2/(.*)$ /$1 break;
-        proxy_pass http://localhost:3009;
-        proxy_set_header Host $host;
-    }
-
-location /transfer/ {
-        rewrite ^/transfer/(.*)$ /$1 break;
-        proxy_pass http://localhost:4001;
-        proxy_set_header Host $host;
-    }
-
-location /hello-world/ {
-        rewrite ^/hello-world/(.*)$ /$1 break;
-        proxy_pass http://localhost:3010;
-        proxy_set_header Host $host;
-    }
-
-location /apps/ {
-        rewrite ^/apps/(.*)$ /$1 break;
-        proxy_pass http://localhost:3011;
-        proxy_set_header Host $host;
-    }
-
-location /record/ {
-        rewrite ^/record/(.*)$ /$1 break;
-    proxy_pass http://localhost:5040;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_cache_bypass $http_upgrade;
-    proxy_set_header Host $host;
-
-    }
-
-
-location /recording/ {
-        rewrite ^/recording/(.*)$ /$1 break;
-    proxy_pass http://${MONITORING_SERVER_IP}:8444;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_cache_bypass $http_upgrade;
-    proxy_set_header Host $host;
-
-    }
-
-
-
-location /fs1/ {
-        rewrite ^/fs1/(.*)$ /$1 break;
-        proxy_pass http://172.31.10.160;
-        proxy_set_header Host $host;
-    }
-
-
-location /fs2/ {
-        rewrite ^/fs2/(.*)$ /$1 break;
-        proxy_pass http://172.31.11.177;
-        proxy_set_header Host $host;
-    }
-
-
-    location / {
-        proxy_pass http://localhost:3001;
-        proxy_set_header Host $host;
-    }
-
-}
-
-server {
-  listen 443 ssl;
-  server_name grafana.${URLPortal};
- include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:3000;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
-
-server {
-  listen 443 ssl;
-  server_name homer.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:9080;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
-
-server {
-  listen 443 ssl;
-  server_name jaeger.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:16686;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
-EOF
-
-
-#Rename of title and copy logo
-sed -i 's/Jambonz Web App/SAVGW Web App/g' /home/admin/apps/savgw-webapp/dist/index.html
-sed -i 's/Simple provisioning webapp for jambonz/Simple provisioning webapp for SAVGW/g' /home/admin/apps/savgw-webapp/dist/index.html
-#keep kore logo with name jambonz--light.svg in tmp directory
-cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/dist/svg/jambonz--light.svg
-
+                  listen 80;
+                  server_name ${URLPortal};
+                  location /api/ {
+                      rewrite ^/api/(.*)$ /\$1 break;
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+                  location / {
+                      proxy_pass http://localhost:3001;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
+                  listen 80;
+                  server_name api.${URLPortal};
+                  location / {
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
+                listen 80;
+                server_name grafana.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:3000; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 80;
+                server_name homer.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:9080; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 80;
+                server_name jaeger.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:16686; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                  auth_basic "Secured Endpoint";
+                  auth_basic_user_file /etc/nginx/.htpasswd;
+                }
+              }
+              EOF
             
               sudo systemctl restart nginx
 
