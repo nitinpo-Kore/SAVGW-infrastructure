@@ -4,11 +4,11 @@ AWSTemplateFormatVersion: "2010-09-09"
 Mappings:
   AWSRegion2AMI:
     us-east-1:
-      SbcSipAmi: ami-01bd8823d7269c0c8
-      SbcRtpAmi: ami-0954b7e5aaf4ee966
-      FsAmi: ami-0afdc9cef2c7e3e24
-      WebserverAmi: ami-0b0b877726e51a31c
-      MonitoringServerAmi: ami-0b9fe2fe66ff1ad62
+      SbcSipAmi: ami-0bab83015bef0e48c
+      SbcRtpAmi: ami-0d165832da692a9d1
+      FsAmi: ami-02b6ecd4808dc5480
+      WebserverAmi: ami-0c01ee3771017d354
+      MonitoringServerAmi: ami-0e5cc40b6cadc98cd
 
 Parameters:
   KeyName:
@@ -96,6 +96,7 @@ Parameters:
       - c5n.18xlarge
       - c5n.metal  
       - c5n.xlarge  
+      - c6i.xlarge
   InstanceTypeWebserver:
     Description: "the EC2 instance type to use for webServer"
     Type: String
@@ -1835,61 +1836,69 @@ Resources:
               
               sudo cat << EOF > /etc/nginx/sites-available/ssl 
               server {
-                 listen 443 ssl;
-                 include snippets/korevg.conf;
-                 server_name ${URLPortal};
-                 location /api/ {
-                     rewrite ^/api/(.*)$ /$1 break;
-                     proxy_pass http://localhost:3000;
-                     proxy_set_header Host $host;
-                     }
-               location / {
-                  proxy_pass http://localhost:3001;
-                  proxy_set_header Host $host;
-                 }
-             }
-
-		server {
+                  listen 443 ssl;
+                  include snippets/korevg.conf;
+                  server_name ${URLPortal};
+                  location /api/ {
+                      rewrite ^/api/(.*)$ /\$1 break;
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+                  location / {
+                      proxy_pass http://localhost:3001;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
+                  listen 443 ssl;
+                  include snippets/korevg.conf;
+                  server_name api.${URLPortal};
+                  location / {
+                      proxy_pass http://localhost:3000;
+                      proxy_set_header Host \$host;
+                  }
+              }
+              server {
                 listen 443 ssl;
- 	        server_name grafana.${URLPortal};
- 		include snippets/korevg.conf;
- 		 location / {
-   			 proxy_pass http://${MONITORING_SERVER_IP}:3000;
-   			 proxy_http_version 1.1;
-    			 proxy_set_header Upgrade $http_upgrade;
-    			 proxy_set_header Connection 'upgrade';
-                         proxy_set_header Host $host;
-                         proxy_cache_bypass $http_upgrade;
-                         }
-                        }
-
-			server {
-  			listen 443 ssl;
-  			server_name homer.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:9080;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
-
-server {
-  listen 443 ssl;
-  server_name jaeger.${URLPortal};
-include snippets/korevg.conf;
-  location / {
-    proxy_pass http://${MONITORING_SERVER_IP}:16686;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'upgrade';
-    proxy_set_header Host $host;
-    proxy_cache_bypass $http_upgrade;
-  }
-}
+                include snippets/korevg.conf;
+                server_name grafana.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:3000; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 443 ssl;
+                include snippets/korevg.conf;
+                server_name homer.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:9080; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                }
+              }
+              server {
+                listen 443 ssl;
+                include snippets/korevg.conf;
+                server_name jaeger.${URLPortal}; 
+                location / {
+                  proxy_pass http://${MONITORING_SERVER_IP}:16686; 
+                  proxy_http_version 1.1;
+                  proxy_set_header Upgrade \$http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host \$host;
+                  proxy_cache_bypass \$http_upgrade;
+                  auth_basic "Secured Endpoint";
+                  auth_basic_user_file /etc/nginx/.htpasswd;
+                }
+              }
               EOF
             
               sudo systemctl restart nginx

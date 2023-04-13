@@ -13,6 +13,9 @@
   "builders": [{
     "type": "amazon-ebs",
     "region": "{{user `region`}}",
+    "vpc_id": "vpc-0c05c9253a8f61e80",
+    "subnet_id": "subnet-00cda581354c3df04",
+    "associate_public_ip_address": "true",
     "source_ami_filter": {
       "filters": {
         "virtualization-type": "hvm",
