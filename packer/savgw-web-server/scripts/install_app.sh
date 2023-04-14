@@ -12,6 +12,12 @@ sed -i 's/alt="jambonz"/alt="kore"/g' /home/admin/apps/savgw-webapp/src/containe
 sed -i 's/<Icons.GitHub \/>/ /g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
 sed -i 's/<span>GitHub<\/span>/ /g' /home/admin/apps/savgw-webapp/src/containers/login/layout.tsx
 
+#keep kore logo with name jambonz--light.svg
+cp -rvf /tmp/jambonz--light.svg /home/admin/apps/savgw-webapp/public/svg/jambonz--light.svg
+cp -rvf /tmp/jambonz--light.svg /home/admin//apps/savgw-webapp/public/svg/jambonz.svg
+cp -rvf /tmp/favicon.ico /home/admin/apps/savgw-webapp/public/favicon.ico
+
+
 echo "building savgw-api-server.."
 cd /home/admin/apps/savgw-api-server && npm ci
 echo "building savgw-webapp.."
