@@ -1901,6 +1901,7 @@ Resources:
               }
               EOF
             
+              sudo ln -s /etc/nginx/sites-available/ssl /etc/nginx/sites-enabled/ssl
               sudo systemctl restart nginx
 
               echo "enabling cloudwatch"
